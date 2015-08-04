@@ -1,0 +1,77 @@
+{% extends "image/base.html" %}
+
+{% block page_title %} Image Detail {% endblock %}
+
+{% block header_title %} {{ image.caption }} {% endblock %}
+
+{% block page_content %}
+
+	<div class="col-lg-6 col-md-12 col-sm-12">
+		<img class="img-rounded" src="{{ image.path.url }}"/>
+	</div>
+	<div class = "col-lg-6 col-md-12 col-sm-12">
+		<!-- Description -->
+		<div class = "col-lg-12 col-md-12 col-sm-12">
+			<h2>Description</h2>
+		</div>
+		<div class = "col-lg-12 col-md-12 col-sm-12">
+			<h4> {{ image.description }}</h4>
+		</div>
+
+		<!-- Upload Date -->
+		<div class = "col-lg-12 col-md-12 col-sm-12">
+			<h2>Date</h2>
+		</div>
+		<div class = "col-lg-12 col-md-12 col-sm-12">
+			<h4> {{ image.upload_date }}</h4>
+		</div>
+
+		<!-- favorite form-->
+		<div class= "col-lg-3">
+			{% if image.favorite %}
+			Already favorited
+			{% else %}
+			{% csrf_token %}
+			<input id="fav" class="btn btn-primary btn-lg btn-block" value="Add favorite" type="buton">
+			{% endif %}
+		</div>
+	</div>
+
+	<script>
+	/*$("#favForm").submit(function(){
+		$.ajax({
+			url: "{% url 'image:favorite' image.id %}",
+			data : {
+				"pk":2
+			},
+			success: function(){
+
+			},
+			error: function(){
+
+			}
+		})
+	})*/
+	
+	$(document).ready(document_ready);
+function document_ready() {
+    $("#fav").click(function () {
+        $.ajax({
+            type: "post",
+            url: "{% url 'image:favorite' image.id %}",
+            data: {
+            	"pk":2
+            },
+            
+            success: function (data) {
+                alert(data);
+            },
+            error: function (data) {
+                alert("Error. " + "Status: " + data.status + " Text: " + data.statusText);
+            }
+        });
+    })
+}
+	</script>
+
+{% endblock %}

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>{% block page_title %}{% endblock %}</title>
+        <meta name="viewport" content="width=device-width">
+
+        {% load staticfiles %}
+
+        <link rel="stylesheet" type="text/css" href="{% static 'image/slidejs/css/example.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'image/slidejs/css/font-awesome.min.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'image/slidejs/css/custom.css' %}" />
+
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script type = "text/javascript" src="{% static 'image/slidejs/js/jquery.slides.min.js' %}"></script>
+
+        <!-- Bootstrap -->
+        <link rel="stylesheet" type="text/css" href="{% static 'image/bootstrap/css/bootstrap.min.css' %}" />
+
+    </head>
+    <body>
+        <!-- Header -->
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">{% block header_title %}{% endblock %}</a>
+                </div>
+            </div>
+        </nav>
+
+        {% block page_content %}{% endblock %}
+
+    </body>
+</html>
