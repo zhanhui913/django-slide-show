@@ -33,10 +33,9 @@ class ImageDetailView(DetailView):
 	model = Image
 
 	def post(self, request, pk):
-		print "favoriting"
 		fav_status = request.POST.get('fav', 'false')
 		fav_value = False if fav_status.lower() == 'false' else True
-
+		print "favoriting -> "+str(fav_value)
 		instance = get_object_or_404(Image, pk=pk)
 		instance.is_fav = fav_value
 		instance.save()

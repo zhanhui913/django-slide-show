@@ -36,9 +36,9 @@
 		<!-- favorite form-->
 		<div class= "col-lg-12 col-md-12 col-sm-12">
 			{% if image.is_fav %}
-				<input id="fav" class="btn btn-primary btn-lg btn-block" value="Unfavorite" type="buton">
+				<input id="fav" class="btn btn-primary btn-lg btn-block" value="Unfavorite" type="buton" data-type="unFav">
 			{% else %}
-				<input id="fav" class="btn btn-primary btn-lg btn-block" value="Favorite" type="buton">
+				<input id="fav" class="btn btn-primary btn-lg btn-block" value="Favorite" type="buton" data-type="fav">
 			{% endif %}
 		</div>
 	</div>
@@ -69,12 +69,14 @@
 
 		$(function () {
 		    $("#fav").click(function () {
-
-		    	{% if image.is_fav %}
-		    		var fav_value = "False";
-		    	{% else %}
-					var fav_value = "True";
-		    	{% endif %}
+				
+		    	var type = $(this).data("type");
+				var fav_value;
+		    	if(type == "fav"){
+		    		fav_value = "True";
+		    	}else{
+		    		fav_value = "False";
+		    	}
 
 		        $.ajax({
 		            type: "POST",
@@ -83,14 +85,14 @@
 		            	"pk":{{ image.id }},
 		            	"fav": fav_value
 		            },
-		            success: function (data) {		       
-		    			{% if image.is_fav %}
-		    				var f = "Favorite";
-		    			{% else %}
-							var f = "Unfavorite";
-				    	{% endif %}
-		        		//alert("success :"+f);
-		                $("#fav").val(f);
+		            success: function (data) {
+		                if(fav_value == "True"){
+		                	$("#fav").data("type","unFav");	
+		                	$("#fav").val("Unfavorite");
+		                }else{
+		                	$("#fav").data("type","fav");
+		                	$("#fav").val("Favorite");
+		                }
 		            },
 		            error: function (data) {
 		                alert("Error. " + "Status: " + data.status + " Text: " + data.statusText);
