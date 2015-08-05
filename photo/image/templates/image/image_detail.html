@@ -32,13 +32,13 @@
 		<div class = "col-lg-12">
 			<p> {{ image.upload_date }}</p>
 		</div>		
-
+		
 		<!-- favorite form-->
 		<div class= "col-lg-12 col-md-12 col-sm-12">
-			{% if image.favorite %}
-			Already favorited
+			{% if image.is_fav %}
+				<input id="fav" class="btn btn-primary btn-lg btn-block" value="Unfavorite" type="buton">
 			{% else %}
-			<input id="fav" class="btn btn-primary btn-lg btn-block" value="Add favorite" type="buton">
+				<input id="fav" class="btn btn-primary btn-lg btn-block" value="Favorite" type="buton">
 			{% endif %}
 		</div>
 	</div>
@@ -67,24 +67,37 @@
 	    	});
 		});
 
-		$(document).ready(document_ready);
-		function document_ready() {
+		$(function () {
 		    $("#fav").click(function () {
+
+		    	{% if image.is_fav %}
+		    		var fav_value = "False";
+		    	{% else %}
+					var fav_value = "True";
+		    	{% endif %}
+
 		        $.ajax({
-		            type: "post",
-		            url: "{% url 'image:imageDetail' image.id %}",
+		            type: "POST",
+		            url: "{% url 'image:favorite' image.id %}",
 		            data: {
-		            	"pk":4
+		            	"pk":{{ image.id }},
+		            	"fav": fav_value
 		            },
-		            success: function (data) {
-		                alert(data);
+		            success: function (data) {		       
+		    			{% if image.is_fav %}
+		    				var f = "Favorite";
+		    			{% else %}
+							var f = "Unfavorite";
+				    	{% endif %}
+		        		//alert("success :"+f);
+		                $("#fav").val(f);
 		            },
 		            error: function (data) {
 		                alert("Error. " + "Status: " + data.status + " Text: " + data.statusText);
 		            }
 		        });
 		    })
-		}
+		});
 	</script>
 
 {% endblock %}

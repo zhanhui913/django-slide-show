@@ -9,7 +9,5 @@ urlpatterns = patterns('',
 	url(r'^images/(?P<pk>[0-9]+)/$', views.ImageDetailView.as_view(), name='imageDetail'),
 
 	# ex: /images/4/fav
-	#url(r'^images/(?P<pk>[0-9]+)/fav/$', views.ImageFavView.as_view(), name='favorite'),
-
-	# ex: /favorites/1
+	url(r'^images/(?P<pk>[0-9]+)/fav/$', views.favorite, name='favorite'),
 )
