@@ -7,8 +7,9 @@
 {% block page_content %}
 
 	{% if favImages %}
+		<ul id="sortable">
 		{% for image in favImages %}
-			<div id="thumbnail{{image.pk}}" class="thumbnail col-lg-12 col-md-12 col-sm-12 col-xs-12">				
+			<div id="thumbnail-{{image.pk}}" class="ui-state-default thumbnail col-lg-12 col-md-12 col-sm-12 col-xs-12">				
 				<a href="{{ image.get_absolute_url }}" >
 					<img class="col-lg-3 col-md-4 col-sm-6 col-xs-6" src="{{ image.path.url }}"/>
 				</a>
@@ -18,8 +19,11 @@
 				<p><button class="btn btn-primary unFav" role="button" data-pk="{{image.pk}}">Unfavorite</button></p>
 			</div>
 		{% endfor %}
+		</ul>
 	{% else %}
-		There are no favorited images.
+		<div class="alert alert-warning col-lg-10 col-lg-offset-1" role="alert">
+			<strong>Info!</strong> There are no favorite images.
+		</div>
 	{% endif %}
 
 	<script>
@@ -46,7 +50,6 @@
     	});
 	});
 
-
 	$(function () {
 	    $(".unFav").click(function () {
 	    	var pk = $(this).data("pk");
@@ -60,13 +63,25 @@
 	            	"page":"favoriteList"
 	            },
 	            success: function (data) {		       				        		
-	                $("#thumbnail"+pk).remove();
+	                $("#thumbnail-"+pk).remove();
 	            },
 	            error: function (data) {
 	                alert("Image:"+pk+" -> Error. " + "Status: " + data.status + " Text: " + data.statusText);
 	            }
 	        });
 	    })
+	});
+
+	//Sortable
+	$(function(){
+		$("#sortable").sortable({
+			placeholder:"ui-sortable-placeholder",
+			stop:function(e, ui){
+				console.log($.map($(this).find("div[id*='thumbnail']"), function(el) {
+					return $(el).attr('id') + ' = ' + $(el).index();
+				}));
+			}
+		});
 	});
 
 </script>
