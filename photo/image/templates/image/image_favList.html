@@ -1,0 +1,74 @@
+{% extends "image/base.html" %}
+
+{% block page_title %}Favorite list{% endblock %}
+
+{% block header_title %} Slide show {% endblock %}
+
+{% block page_content %}
+
+	{% if favImages %}
+		{% for image in favImages %}
+			<div id="thumbnail{{image.pk}}" class="thumbnail col-lg-12 col-md-12 col-sm-12 col-xs-12">				
+				<a href="{{ image.get_absolute_url }}" >
+					<img class="col-lg-3 col-md-4 col-sm-6 col-xs-6" src="{{ image.path.url }}"/>
+				</a>
+				<div class="caption">
+					<h3>{{image.caption}}</h3>
+				</div>
+				<p><button class="btn btn-primary unFav" role="button" data-pk="{{image.pk}}">Unfavorite</button></p>
+			</div>
+		{% endfor %}
+	{% else %}
+		There are no favorited images.
+	{% endif %}
+
+	<script>
+	// using jQuery
+	function getCookie(name) {
+	    var cookieValue = null;
+	    if (document.cookie && document.cookie != '') {
+	        var cookies = document.cookie.split(';');
+	        for (var i = 0; i < cookies.length; i++) {
+	            var cookie = jQuery.trim(cookies[i]);
+	            // Does this cookie string begin with the name we want?
+	            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+	                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+	                break;
+	            }
+	        }
+	    }
+	    return cookieValue;
+	}
+
+	$(function () {
+    	$.ajaxSetup({
+        	headers: { "X-CSRFToken": getCookie("csrftoken") }
+    	});
+	});
+
+
+	$(function () {
+	    $(".unFav").click(function () {
+	    	var pk = $(this).data("pk");
+
+	        $.ajax({
+	            type: "POST",
+	            url: "{% url 'image:favoriteList' %}",
+	            data: {
+	            	"pk":pk,
+	            	"fav": "False",
+	            	"page":"favoriteList"
+	            },
+	            success: function (data) {		       				        		
+	                $("#thumbnail"+pk).remove();
+	            },
+	            error: function (data) {
+	                alert("Image:"+pk+" -> Error. " + "Status: " + data.status + " Text: " + data.statusText);
+	            }
+	        });
+	    })
+	});
+
+</script>
+
+{% endblock %}
