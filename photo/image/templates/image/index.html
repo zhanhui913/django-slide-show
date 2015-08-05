@@ -33,12 +33,13 @@
                     {{ field.label_tag }} {{ field }} {{ field.errors }}
                 </div>
             {% endfor %}        
-
-
-
             <input class="btn btn-primary btn-lg" type="submit" value="Upload" />
         </form>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <a href="{% url 'image:favoriteList' %}"><input id="fav" class="btn btn-primary btn-lg btn-block" value="Go to Favorite" type="buton"></a>
+        </div>
     </div>
+
 
     <script>
         $(function(){

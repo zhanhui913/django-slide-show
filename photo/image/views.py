@@ -32,13 +32,36 @@ class ImageAddView(FormView):
 class ImageDetailView(DetailView):
 	model = Image
 
-def favorite(request, pk):
-	print "favorite "+pk+" = "+request.POST.get("fav")
+	def post(self, request, pk):
+		print "favoriting"
+		fav_status = request.POST.get('fav', 'false')
+		fav_value = False if fav_status.lower() == 'false' else True
 
-	fav_status = request.POST.get('fav', 'false')
-	fav_value = False if fav_status.lower() == 'false' else True
+		instance = get_object_or_404(Image, pk=pk)
+		instance.is_fav = fav_value
+		instance.save()
+		return HttpResponseRedirect(reverse_lazy('image:imageDetail', args=(pk)))
 
-	instance = get_object_or_404(Image, pk=pk)
-	instance.is_fav = fav_value
-	instance.save()
-	return HttpResponseRedirect(reverse_lazy('image:imageDetail', args=(pk)))
+class FavList(ListView):
+	print "favList"
+	model = Image
+	context_object_name = "favImages"
+	template_name = 'image/image_favList.html'
+	def get_queryset(self):
+		"""
+		Return all favorited images.
+		"""
+		return Image.objects.filter(is_fav=True)
+
+
+	def post(self, request):
+		print "posting on favList"
+		pk = request.POST.get('pk')
+		
+		fav_status = request.POST.get('fav', 'false')
+		fav_value = False if fav_status.lower() == 'false' else True
+
+		instance = get_object_or_404(Image, pk=pk)
+		instance.is_fav = fav_value
+		instance.save()
+		return HttpResponseRedirect(reverse_lazy('image:favoriteList'))
