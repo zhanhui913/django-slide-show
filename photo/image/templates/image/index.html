@@ -2,7 +2,7 @@
 
 {% block page_title %}Home{% endblock %}
 
-{% block header_title %}Home{% endblock %}
+{% block header_title %} Slide Show {% endblock %}
 
 {% block page_content %}
     {% if images %}
@@ -32,7 +32,10 @@
                 <div class="col-md-6 form-group">
                     {{ field.label_tag }} {{ field }} {{ field.errors }}
                 </div>
-            {% endfor %}
+            {% endfor %}        
+
+
+
             <input class="btn btn-primary btn-lg" type="submit" value="Upload" />
         </form>
     </div>
