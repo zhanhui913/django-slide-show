@@ -31,47 +31,53 @@
 			{% if image.favorite %}
 			Already favorited
 			{% else %}
-			{% csrf_token %}
 			<input id="fav" class="btn btn-primary btn-lg btn-block" value="Add favorite" type="buton">
 			{% endif %}
 		</div>
 	</div>
 
 	<script>
-	/*$("#favForm").submit(function(){
-		$.ajax({
-			url: "{% url 'image:favorite' image.id %}",
-			data : {
-				"pk":2
-			},
-			success: function(){
+		// using jQuery
+		function getCookie(name) {
+		    var cookieValue = null;
+		    if (document.cookie && document.cookie != '') {
+		        var cookies = document.cookie.split(';');
+		        for (var i = 0; i < cookies.length; i++) {
+		            var cookie = jQuery.trim(cookies[i]);
+		            // Does this cookie string begin with the name we want?
+		            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+		                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+		                break;
+		            }
+		        }
+		    }
+		    return cookieValue;
+		}
 
-			},
-			error: function(){
+		$(function () {
+	    	$.ajaxSetup({
+	        	headers: { "X-CSRFToken": getCookie("csrftoken") }
+	    	});
+		});
 
-			}
-		})
-	})*/
-	
-	$(document).ready(document_ready);
-function document_ready() {
-    $("#fav").click(function () {
-        $.ajax({
-            type: "post",
-            url: "{% url 'image:favorite' image.id %}",
-            data: {
-            	"pk":2
-            },
-            
-            success: function (data) {
-                alert(data);
-            },
-            error: function (data) {
-                alert("Error. " + "Status: " + data.status + " Text: " + data.statusText);
-            }
-        });
-    })
-}
+		$(document).ready(document_ready);
+		function document_ready() {
+		    $("#fav").click(function () {
+		        $.ajax({
+		            type: "post",
+		            url: "{% url 'image:imageDetail' image.id %}",
+		            data: {
+		            	"pk":4
+		            },
+		            success: function (data) {
+		                alert(data);
+		            },
+		            error: function (data) {
+		                alert("Error. " + "Status: " + data.status + " Text: " + data.statusText);
+		            }
+		        });
+		    })
+		}
 	</script>
 
 {% endblock %}

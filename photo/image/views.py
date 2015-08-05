@@ -4,8 +4,9 @@ from django.views.generic import ListView, FormView, DetailView
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 
-from .models import Image, Favorite
-from .forms import ImageForm
+
+from .models import Image
+from .forms import ImageForm, FavForm
 
 # Create your views here.
 class ImageListView(ListView):
@@ -30,6 +31,27 @@ class ImageAddView(FormView):
 
 class ImageDetailView(DetailView):
 	model = Image
+
+	def favorite(request, pk):
+		print 'favorites '+pk
+		return HttpResponseRedirect(reverse('image:imageDetail'))
+
+class ImageFavView(FormView):
+	model = Image
+	form_class = FavForm
+	success_url = reverse_lazy('image:imageDetail')
+	template_name = 'image/image_detail.html'
+
+	def form_valid(self, form):
+		form.save(commit = True)
+		return super(ImageFavView, self).form_valid(form)
+
+	def get_context_data(self, **kwargs):
+		context = super(ImageFavView, self).get_context_data(**kwargs)
+		context['images'] = self.model.objects.all()
+		return context
+
+
 """
 class FavoriteListView(ListView):
 	model = Favorite
@@ -37,13 +59,3 @@ class FavoriteListView(ListView):
 	template_name = 'image/list_favorite_images.html'
 """
 
-def favorite(request, pk):
-	"""
-	p = get_object_or_404(Image, pk = pk)
-	p.favorite_set.post(pk=request.POST['pk'])
-	print "favorited "+pk+" -> "+p
-	p.save()
-	return HttpResponseRedirect(reverse('image:imageDetail'))
-	"""
-	print "favorited "+pk
-	return HttpResponseRedirect(reverse('image:imageDetail'))

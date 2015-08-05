@@ -8,3 +8,8 @@ class ImageForm(forms.ModelForm):
 	class Meta:
 		model = Image
 		fields = ['path','caption','description','upload_date']
+
+class FavForm(forms.ModelForm):
+	class Meta:
+		model = Image
+		fields = ['is_fav']
