@@ -20,7 +20,7 @@ class ImageAddView(FormView):
 	template_name = 'image/index.html'
 
 	def form_valid(self, form):
-		form.save(commit = True)
+		form.save(commit = True) # commit not required (default=True)
 		messages.success(self.request, 'File uploaded', fail_silently = True)
 		return super(ImageAddView, self).form_valid(form)
 
@@ -38,23 +38,28 @@ class ImageDetailView(DetailView):
 
 		if fav_status.lower() == "false":
 			# Removing this image from favorite table
-			i = Image.objects.get(pk=pk)
+            
+			i = Image.objects.get(pk=pk) # Put a try catch here or do a get_object_or_404
+            
 			f = Favorite.objects.get(image=i)
 			f.delete()
 
 		else:
 			# Adding this image to favorite table
 			f = Favorite()
-			f.image = Image.objects.get(pk=pk)
+            
+			f.image = Image.objects.get(pk=pk) # Put a try catch here or do a get_object_or_404
 			
+            # This can be
+            # Favourite.objects.reverse()
 			list_image = Favorite.objects.order_by("-order")
 
 			# If list_image exist (Ie: There is at least 1 favorited image)
 			if list_image:
-				highest_order_image = list_image[0]	
-				f.order = highest_order_image.order + 1	
+				highest_order_image = list_image[0]
+				f.order = highest_order_image.order + 1
 			else:
-				f.order = 1	
+				f.order = 1
 
 			f.save()
 
@@ -68,7 +73,7 @@ class FavList(ListView):
 	
 	def get_queryset(self):
 		# Return all favorited images.
-		return Favorite.objects.all().order_by('order')
+		return Favorite.objects.all().order_by('order') # You can set a default ordering inside the Meta class in the model.
 
 	def post(self, request):
 		ref = request.POST.get('ref')

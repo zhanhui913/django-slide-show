@@ -3,6 +3,13 @@ from django.contrib import admin
 from .models import Image, Favorite
 
 # Register your models here.
+
+# You can do this:
+# @admin.register(Image)
+#
+# instead of admin.site.register(Image, ImageAdmin)
+#
+# Same for below (FavAdmin_
 class ImageAdmin(admin.ModelAdmin):
 	fieldsets = [
 		(None,               {'fields':['caption']}),
