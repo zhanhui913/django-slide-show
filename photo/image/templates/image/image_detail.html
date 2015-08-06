@@ -1,5 +1,7 @@
 {% extends "image/base.html" %}
 
+{% load image_tags %}
+
 {% block page_title %} Image Detail {% endblock %}
 
 {% block header_title %} Home {% endblock %}
@@ -8,20 +10,9 @@
 
 {% block page_content %}
 
-
 	<div class="col-lg-9 col-md-12 col-sm-12">
 		<div>
-			<img class="img-rounded" src="{{ image.path.url }}"/>
-			{% if image.is_fav %}
-				<div id="fav" data-type="unFav">
-					<i class="heart fa fa-heart fa-3x"></i>
-				</div>
-			{% else %}
-				<div id="fav" data-type="fav">
-					<i class="heart fa fa-heart-o fa-3x"></i>
-				</div>
-			{% endif %}
-			
+			{% fav_button image %}
 		</div>
 	</div>
 	<div class = "col-lg-3 col-md-12 col-sm-12">
@@ -29,7 +20,7 @@
 		<div class = "col-lg-12">
 			<h3> {{ image.caption }}</h3>
 		</div>
-		.
+
 		<!-- Description -->
 		<div class = "col-lg-12 col-md-12 col-sm-12">
 			<p> {{ image.description }}</p>

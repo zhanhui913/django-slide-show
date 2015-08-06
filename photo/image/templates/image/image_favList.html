@@ -1,5 +1,7 @@
 {% extends "image/base.html" %}
 
+{% load image_tags %}
+
 {% block page_title %}Favorite list{% endblock %}
 
 {% block header_title %} Home {% endblock %}
@@ -8,16 +10,16 @@
 
 	{% if favImages %}
 		<ul id="sortable">
-		{% for image in favImages %}
-			<div id="thumbnail-{{image.pk}}" class="ui-state-default thumbnail row">
+		{% for favorite in favImages %}
+			<div id="thumbnail-{{favorite.image.pk}}" class="ui-state-default thumbnail row">
 				<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-					<i data-pk="{{image.pk}}" class="unFav heart fa fa-heart fa-3x"></i>
+					<i data-pk="{{favorite.image.pk}}" class="unFav heart fa fa-heart fa-3x"></i>
 				</div>		
-				<a href="{{ image.get_absolute_url }}" >
-					<img class="col-lg-3 col-md-4 col-sm-6 col-xs-6" src="{{ image.path.url }}"/>
+				<a href="{{ favorite.image.get_absolute_url }}" >
+					<img class="col-lg-3 col-md-4 col-sm-6 col-xs-6" src="{{ favorite.image.path.url }}"/>
 				</a>
-				<h3>{{image.caption}}</h3>
-				<p>{{image.description}}</p>
+				<h3>{{favorite.image.caption}}</h3>
+				<p>{{favorite.image.description}}</p>
 			</div>
 		{% endfor %}
 		</ul>
@@ -59,6 +61,7 @@
 	            type: "POST",
 	            url: "{% url 'image:favoriteList' %}",
 	            data: {
+	            	"ref":"favorite",
 	            	"pk":pk,
 	            	"fav": "False",
 	            	"page":"favoriteList"
@@ -78,9 +81,25 @@
 		$("#sortable").sortable({
 			placeholder:"ui-sortable-placeholder",
 			stop:function(e, ui){
-				console.log($.map($(this).find("div[id*='thumbnail']"), function(el) {
+				var order = $.map($(this).find("div[id*='thumbnail']"), function(el) {
 					return $(el).index()+"-"+$(el).attr('id');
-				}));
+				});
+				console.log(order);
+
+				$.ajax({
+					type:"POST",
+					url: "{% url 'image:favoriteList' %}",
+					data:{
+						"ref":"sort",
+						"new_order": order
+					},
+					success:function(data){
+						alert("success at re-ordering");
+					},
+					error:function(data){
+						alert("Error. " + "Status: " + data.status + " Text: " + data.statusText);
+					}
+				});
 			}
 		});
 	});
