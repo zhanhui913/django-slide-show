@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Image
+from .models import Image, Favorite
 
 # Register your models here.
 class ImageAdmin(admin.ModelAdmin):
@@ -17,3 +17,7 @@ class ImageAdmin(admin.ModelAdmin):
 admin.site.register(Image, ImageAdmin)
 
 
+class FavAdmin(admin.ModelAdmin):
+	list_display = ('image','order')
+
+admin.site.register(Favorite, FavAdmin)

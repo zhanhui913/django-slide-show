@@ -1,0 +1,4 @@
+<img class="img-rounded" src="{{ image.path.url }}"/>
+<div id="fav" data-type="{% if is_fav %}unFav{% else %}fav{% endif %}">
+	<i class="heart fa {% if is_fav %}fa-heart{% else %}fa-heart-o{% endif %} fa-3x"></i>
+</div>

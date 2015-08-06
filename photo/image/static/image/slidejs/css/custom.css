@@ -81,6 +81,20 @@ body {
 }
 
 
+div .heart{
+  position:absolute;
+  left:5%;
+  top:2.5%;
+}
+
+div .heart:hover{
+  cursor:pointer;
+}
+
+.heart{
+  color:#D91E18;
+}
+
 /* For tablets & smart phones */
 @media (max-width: 767px) {
   body {

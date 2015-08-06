@@ -1,25 +1,32 @@
 {% extends "image/base.html" %}
 
+{% load image_tags %}
+
 {% block page_title %}Favorite list{% endblock %}
 
-{% block header_title %} Slide show {% endblock %}
+{% block header_title %} Home {% endblock %}
 
 {% block page_content %}
 
 	{% if favImages %}
-		{% for image in favImages %}
-			<div id="thumbnail{{image.pk}}" class="thumbnail col-lg-12 col-md-12 col-sm-12 col-xs-12">				
-				<a href="{{ image.get_absolute_url }}" >
-					<img class="col-lg-3 col-md-4 col-sm-6 col-xs-6" src="{{ image.path.url }}"/>
+		<ul id="sortable">
+		{% for favorite in favImages %}
+			<div id="thumbnail-{{favorite.image.pk}}" class="ui-state-default thumbnail row">
+				<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+					<i data-pk="{{favorite.image.pk}}" class="unFav heart fa fa-heart fa-3x"></i>
+				</div>		
+				<a href="{{ favorite.image.get_absolute_url }}" >
+					<img class="col-lg-3 col-md-4 col-sm-6 col-xs-6" src="{{ favorite.image.path.url }}"/>
 				</a>
-				<div class="caption">
-					<h3>{{image.caption}}</h3>
-				</div>
-				<p><button class="btn btn-primary unFav" role="button" data-pk="{{image.pk}}">Unfavorite</button></p>
+				<h3>{{favorite.image.caption}}</h3>
+				<p>{{favorite.image.description}}</p>
 			</div>
 		{% endfor %}
+		</ul>
 	{% else %}
-		There are no favorited images.
+		<div class="alert alert-warning col-lg-10 col-lg-offset-1" role="alert">
+			<strong>Info!</strong> There are no favorite images.
+		</div>
 	{% endif %}
 
 	<script>
@@ -46,7 +53,6 @@
     	});
 	});
 
-
 	$(function () {
 	    $(".unFav").click(function () {
 	    	var pk = $(this).data("pk");
@@ -55,18 +61,47 @@
 	            type: "POST",
 	            url: "{% url 'image:favoriteList' %}",
 	            data: {
+	            	"ref":"favorite",
 	            	"pk":pk,
 	            	"fav": "False",
 	            	"page":"favoriteList"
 	            },
 	            success: function (data) {		       				        		
-	                $("#thumbnail"+pk).remove();
+	                $("#thumbnail-"+pk).remove();
 	            },
 	            error: function (data) {
 	                alert("Image:"+pk+" -> Error. " + "Status: " + data.status + " Text: " + data.statusText);
 	            }
 	        });
 	    })
+	});
+
+	//Sortable
+	$(function(){
+		$("#sortable").sortable({
+			placeholder:"ui-sortable-placeholder",
+			stop:function(e, ui){
+				var order = $.map($(this).find("div[id*='thumbnail']"), function(el) {
+					return $(el).index()+"-"+$(el).attr('id');
+				});
+				console.log(order);
+
+				$.ajax({
+					type:"POST",
+					url: "{% url 'image:favoriteList' %}",
+					data:{
+						"ref":"sort",
+						"new_order": order
+					},
+					/*success:function(data){
+						alert("success at re-ordering");
+					},
+					error:function(data){
+						alert("Error. " + "Status: " + data.status + " Text: " + data.statusText);
+					}*/
+				});
+			}
+		});
 	});
 
 </script>

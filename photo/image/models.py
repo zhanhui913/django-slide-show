@@ -14,11 +14,12 @@ class Image(models.Model):
 	def get_absolute_url(self):
 		return ('image:imageDetail', [self.pk])
 
-	def get_fav_list(self):
-		return Image.objects.all().filter(
-			is_fav=True
-		)
-
 	def __str__(self):
 		return self.caption
 
+class Favorite(models.Model):
+	image = models.ForeignKey(Image, primary_key=True, related_name="favorites")
+	order = models.IntegerField(blank=True, null=True)
+
+	def __str__(self):
+		return self.image.caption

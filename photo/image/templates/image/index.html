@@ -2,17 +2,17 @@
 
 {% block page_title %}Home{% endblock %}
 
-{% block header_title %} Slide Show {% endblock %}
+{% block header_title %} Home {% endblock %}
+
+{% block header_second %} <a class="navbar-brand" href="{% url 'image:favoriteList' %}"><i class="fa fa-heart fa-1x"> Favorites </i></a> {% endblock %}
 
 {% block page_content %}
     {% if images %}
         <div class="slideContainer">
             <div id = "slides">
                 {% for image in images %}
-                    <!--<a href="{{ image.path.url }}"><img src="{{ image.path.url }}"/></a>-->
                     <a href="{{ image.get_absolute_url }}">
                         <img src="{{ image.path.url }}"/>
-                        <p>{{image.caption}}</p>
                     </a>
                 {% endfor %}
                 <a href="#" class="slidesjs-previous slidesjs-navigation"><i class="icon-chevron-left icon-large"></i></a>
@@ -35,11 +35,7 @@
             {% endfor %}        
             <input class="btn btn-primary btn-lg" type="submit" value="Upload" />
         </form>
-        <div class="col-lg-12 col-md-12 col-sm-12">
-            <a href="{% url 'image:favoriteList' %}"><input id="fav" class="btn btn-primary btn-lg btn-block" value="Go to Favorite" type="buton"></a>
-        </div>
     </div>
-
 
     <script>
         $(function(){
