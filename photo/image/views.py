@@ -47,9 +47,15 @@ class ImageDetailView(DetailView):
 			f = Favorite()
 			f.image = Image.objects.get(pk=pk)
 			
-			#Find the highest order and +1
-			highest_order_image = Favorite.objects.order_by("-order")[0]
-			f.order = highest_order_image.order + 1
+			list_image = Favorite.objects.order_by("-order")
+
+			# If list_image exist (Ie: There is at least 1 favorited image)
+			if list_image:
+				highest_order_image = list_image[0]	
+				f.order = highest_order_image.order + 1	
+			else:
+				f.order = 1	
+
 			f.save()
 
 		return HttpResponseRedirect(reverse_lazy('image:imageDetail', args=(pk)))
