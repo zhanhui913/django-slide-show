@@ -2,20 +2,27 @@
 
 {% block page_title %} Image Detail {% endblock %}
 
-{% block header_title %} Slide Show {% endblock %}
+{% block header_title %} Home {% endblock %}
+
+{% block header_second %} <a class="navbar-brand" href="{% url 'image:favoriteList' %}"><i class="fa fa-heart fa-1x"> Favorites </i></a> {% endblock %}
 
 {% block page_content %}
 
-	<div class="col-lg-1 col-md-12 col-sm-12">
-		<a href="/">
-			<button type="button" class="btn btn-default btn-lg">
-  				<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>Back
-			</button>
-		</a>
-	</div>
 
-	<div class="col-lg-8 col-md-12 col-sm-12">
-		<img class="img-rounded" src="{{ image.path.url }}"/>
+	<div class="col-lg-9 col-md-12 col-sm-12">
+		<div>
+			<img class="img-rounded" src="{{ image.path.url }}"/>
+			{% if image.is_fav %}
+				<div id="fav" data-type="unFav">
+					<i class="heart fa fa-heart fa-3x"></i>
+				</div>
+			{% else %}
+				<div id="fav" data-type="fav">
+					<i class="heart fa fa-heart-o fa-3x"></i>
+				</div>
+			{% endif %}
+			
+		</div>
 	</div>
 	<div class = "col-lg-3 col-md-12 col-sm-12">
 		<!-- Caption -->
@@ -31,15 +38,6 @@
 		<!-- Upload Date -->
 		<div class = "col-lg-12">
 			<p> {{ image.upload_date }}</p>
-		</div>		
-		
-		<!-- favorite form-->
-		<div class= "col-lg-12 col-md-12 col-sm-12">
-			{% if image.is_fav %}
-				<input id="fav" class="btn btn-primary btn-lg btn-block" value="Unfavorite" type="buton" data-type="unFav">
-			{% else %}
-				<input id="fav" class="btn btn-primary btn-lg btn-block" value="Favorite" type="buton" data-type="fav">
-			{% endif %}
 		</div>
 	</div>
 
@@ -88,10 +86,10 @@
 		            success: function (data) {
 		                if(fav_value == "True"){
 		                	$("#fav").data("type","unFav");	
-		                	$("#fav").val("Unfavorite");
+		                	$("#fav").find("i").addClass("fa-heart").removeClass("fa-heart-o");
 		                }else{
 		                	$("#fav").data("type","fav");
-		                	$("#fav").val("Favorite");
+		                	$("#fav").find("i").addClass("fa-heart-o").removeClass("fa-heart");
 		                }
 		            },
 		            error: function (data) {

@@ -2,14 +2,17 @@
 
 {% block page_title %}Favorite list{% endblock %}
 
-{% block header_title %} Slide show {% endblock %}
+{% block header_title %} Home {% endblock %}
 
 {% block page_content %}
 
 	{% if favImages %}
 		<ul id="sortable">
 		{% for image in favImages %}
-			<div id="thumbnail-{{image.pk}}" class="ui-state-default thumbnail col-lg-12 col-md-12 col-sm-12 col-xs-12">				
+			<div id="thumbnail-{{image.pk}}" class="ui-state-default thumbnail row">
+				<div id="fav" data-type="{{image.pk}}" class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+					<i class="fa fa-heart-o fa-3x"></i>
+				</div>		
 				<a href="{{ image.get_absolute_url }}" >
 					<img class="col-lg-3 col-md-4 col-sm-6 col-xs-6" src="{{ image.path.url }}"/>
 				</a>

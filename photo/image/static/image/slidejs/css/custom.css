@@ -81,6 +81,21 @@ body {
 }
 
 
+div .heart{
+  position:absolute;
+  left:5%;
+  top:2.5%;
+  color:#D91E18;
+}
+
+.row #fav{
+  vertical-align: middle;
+}
+
+div .star:hover{
+  cursor:pointer;
+}
+
 /* For tablets & smart phones */
 @media (max-width: 767px) {
   body {
