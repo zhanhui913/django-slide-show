@@ -10,16 +10,14 @@
 		<ul id="sortable">
 		{% for image in favImages %}
 			<div id="thumbnail-{{image.pk}}" class="ui-state-default thumbnail row">
-				<div id="fav" data-type="{{image.pk}}" class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-					<i class="fa fa-heart-o fa-3x"></i>
+				<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+					<i data-pk="{{image.pk}}" class="unFav heart fa fa-heart fa-3x"></i>
 				</div>		
 				<a href="{{ image.get_absolute_url }}" >
 					<img class="col-lg-3 col-md-4 col-sm-6 col-xs-6" src="{{ image.path.url }}"/>
 				</a>
-				<div class="caption">
-					<h3>{{image.caption}}</h3>
-				</div>
-				<p><button class="btn btn-primary unFav" role="button" data-pk="{{image.pk}}">Unfavorite</button></p>
+				<h3>{{image.caption}}</h3>
+				<p>{{image.description}}</p>
 			</div>
 		{% endfor %}
 		</ul>
@@ -81,7 +79,7 @@
 			placeholder:"ui-sortable-placeholder",
 			stop:function(e, ui){
 				console.log($.map($(this).find("div[id*='thumbnail']"), function(el) {
-					return $(el).attr('id') + ' = ' + $(el).index();
+					return $(el).index()+"-"+$(el).attr('id');
 				}));
 			}
 		});

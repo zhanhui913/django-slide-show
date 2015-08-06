@@ -85,15 +85,14 @@ div .heart{
   position:absolute;
   left:5%;
   top:2.5%;
-  color:#D91E18;
 }
 
-.row #fav{
-  vertical-align: middle;
-}
-
-div .star:hover{
+div .heart:hover{
   cursor:pointer;
+}
+
+.heart{
+  color:#D91E18;
 }
 
 /* For tablets & smart phones */

@@ -13,7 +13,6 @@
                 {% for image in images %}
                     <a href="{{ image.get_absolute_url }}">
                         <img src="{{ image.path.url }}"/>
-                        <p>{{image.caption}}</p>
                     </a>
                 {% endfor %}
                 <a href="#" class="slidesjs-previous slidesjs-navigation"><i class="icon-chevron-left icon-large"></i></a>
@@ -37,7 +36,6 @@
             <input class="btn btn-primary btn-lg" type="submit" value="Upload" />
         </form>
     </div>
-
 
     <script>
         $(function(){
