@@ -24,39 +24,28 @@
     {% endif %}
 
     <!-- Upload form. Note enctype attribute! -->
-    <div class="form col-lg-6 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-12">
-        <form class=" col-md-12" action="{% url 'image:home' %}" method="post" enctype="multipart/form-data">
+    <div class="container form col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-12">
+        <form class="col-md-12" action="{% url 'image:home' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.non_field_errors }}
-            {% for field in form %}
-                <div class="col-md-6 input-group">
-                    <span class="input-group-addon"><i class="fa fa-tag"></i></span>
-                    {{ field.label_tag }} {{ field }} {{ field.errors }}
-                </div>
-            {% endfor %}
-            
-            <!-- Caption -->
             <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-image"></i></span>
-                <input type="file" class="form-control"/>
+                <span for="id_path" class="input-group-addon"><i class="fa fa-image"></i></span>
+                <input id="id_path" name="path" type="file" class="form-control">
             </div>
             <br>
-            <!-- Caption -->
             <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-tag"></i></span>
-                <input type="text" class="form-control" placeholder="Caption" id="id_caption" name="">
+                <span for="id_caption" class="input-group-addon"><i class="fa fa-tag"></i></span>
+                <input id="id_caption" name="caption" maxlength="200" type="text" class="form-control" placeholder="Caption">
             </div>
             <br>
-            <!-- Description -->
             <div class="input-group">
-                <span class="input-group-addon" id="id_description"><i class="fa fa-comment"></i></span>
-                <input type="text" class="form-control" placeholder="Description" id="id_description">
+                <span for="id_description" class="input-group-addon"><i class="fa fa-comment"></i></span>
+                <input id="id_description" name="description" maxlength="2000" type="text" class="form-control" placeholder="Description">
             </div>
             <br>
-            <!-- Date -->
             <div class="input-group">
-                <span class="input-group-addon" id="id_upload_date"><i class="fa fa-calendar"></i></span>
-                <input type="text" class="form-control" placeholder="Date" id="initial-id_upload_date">
+                <span for="id_upload_date" class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                <input id="id_upload_date" name="upload_date" type="text" class="form-control" placeholder="Date">
             </div>
             <br>
             <input class="btn btn-primary btn-lg" type="submit" value="Upload" />
@@ -71,9 +60,5 @@
                 naviation:true
             });            
         });
-/*
-        $(function() {
-            $("#initial-id_upload_date").datepicker();
-        });*/
     </script>
 {% endblock%}
