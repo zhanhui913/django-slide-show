@@ -1,0 +1,88 @@
+{% extends "image/base.html" %}
+
+{% load image_tags %}
+
+{% block page_title %}Favorite list{% endblock %}
+
+{% block header_title %} Home {% endblock %}
+
+{% block header_second %}
+    <a class="navbar-brand" href="{% url 'image:favoriteList' %}"><i class="fa fa-heart fa-1x"> Favorites </i></a> 
+{% endblock %}
+
+{% block page_content %}
+
+	{% if images %}
+		<div class="listContainer">
+		{% for image in images %}
+			<div id="thumbnail-{{image.pk}}" class="ui-state-default thumbnail row">
+				<div id="fav" class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+					<i data-pk="{{image.pk}}" data-type="{% if image.favorites.all %}unFav{% else %}fav{% endif %}" class="heart fa fa-heart{% if not image.favorites.all %}-o{% endif %} fa-3x"></i>
+				</div>
+
+				<a href="{{ image.get_absolute_url }}" >
+					<img class="col-lg-3 col-md-4 col-sm-6 col-xs-6" src="{{ image.path.url }}"/>
+				</a>
+				<h3>{{image.caption}}</h3>
+				<p>{{image.description}}</p>
+				<p>{{image.upload_date}}</p>
+			</div>
+		{% endfor %}
+		</div>
+	{% else %}
+		<div class="alert alert-warning col-lg-10 col-lg-offset-1" role="alert">
+			<strong>Info!</strong> There are no images.
+		</div>
+	{% endif %}
+
+	<script>
+		// using jQuery
+		function getCookie(name) {
+		    var cookieValue = null;
+		    if (document.cookie && document.cookie != '') {
+		        var cookies = document.cookie.split(';');
+		        for (var i = 0; i < cookies.length; i++) {
+		            var cookie = jQuery.trim(cookies[i]);
+		            // Does this cookie string begin with the name we want?
+		            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+		                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+		                break;
+		            }
+		        }
+		    }
+		    return cookieValue;
+		}
+
+		$(function () {
+	    	$.ajaxSetup({
+	        	headers: { "X-CSRFToken": getCookie("csrftoken") }
+	    	});
+		});
+
+		$(function () {
+		    $("#fav i").click(function () { 
+		    	var self = $(this);
+		    	var action = self.data("type");
+		    	var imagePk = self.data("pk");
+		    	var fav_value = action == "fav";
+		    	
+		        $.ajax({
+		            type: "POST",
+		            url: "{% url 'image:imageList' %}",
+		            data: {
+		            	"pk": imagePk,
+		            	"fav": fav_value
+		            },
+		            success: function (data) {
+		                self.data("type",(fav_value) ? "unFav" : "fav" );
+		                self.toggleClass("fa-heart", fav_value).toggleClass("fa-heart-o", !fav_value);
+		            },
+		            error: function (data) {
+		                alert("Error. " + "Status: " + data.status + " Text: " + data.statusText);
+		            }
+		        });
+		    })
+		});
+	</script>
+
+{% endblock %}
