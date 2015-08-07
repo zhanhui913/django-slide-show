@@ -2,38 +2,38 @@
 
 {% load image_tags %}
 
-{% block page_title %} Image Detail {% endblock %}
+{% block page_title %}Favorite list{% endblock %}
 
 {% block header_title %} Home {% endblock %}
 
 {% block header_second %}
     <a class="navbar-brand" href="{% url 'image:favoriteList' %}"><i class="fa fa-heart fa-1x"> Favorites </i></a> 
-    <a class="navbar-brand" href="{% url 'image:imageList' %}"><i class="fa fa-list fa-1x"> List </i></a>
 {% endblock %}
 
 {% block page_content %}
 
-	<div class="col-lg-9 col-md-12 col-sm-12">
-		<div>
-			{% fav_button image %}
-		</div>
-	</div>
-	<div class = "col-lg-3 col-md-12 col-sm-12">
-		<!-- Caption -->
-		<div class = "col-lg-12">
-			<h3> {{ image.caption }}</h3>
-		</div>
+	{% if images %}
+		<div class="listContainer">
+		{% for image in images %}
+			<div id="thumbnail-{{image.pk}}" class="ui-state-default thumbnail row">
+				<div id="fav" class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+					<i data-pk="{{image.pk}}" data-type="{% if image.favorites.all %}unFav{% else %}fav{% endif %}" class="heart fa fa-heart{% if not image.favorites.all %}-o{% endif %} fa-3x"></i>
+				</div>
 
-		<!-- Description -->
-		<div class = "col-lg-12 col-md-12 col-sm-12">
-			<p> {{ image.description }}</p>
+				<a href="{{ image.get_absolute_url }}" >
+					<img class="col-lg-3 col-md-4 col-sm-6 col-xs-6" src="{{ image.path.url }}"/>
+				</a>
+				<h3>{{image.caption}}</h3>
+				<p>{{image.description}}</p>
+				<p>{{image.upload_date}}</p>
+			</div>
+		{% endfor %}
 		</div>
-
-		<!-- Upload Date -->
-		<div class = "col-lg-12">
-			<p> {{ image.upload_date }}</p>
+	{% else %}
+		<div class="alert alert-warning col-lg-10 col-lg-offset-1" role="alert">
+			<strong>Info!</strong> There are no images.
 		</div>
-	</div>
+	{% endif %}
 
 	<script>
 		// using jQuery
@@ -60,21 +60,22 @@
 		});
 
 		$(function () {
-		    $("#fav").click(function () {
-		    	var type = $(this).data("type");
-		    	var fav_value = type == "fav";
-
-
+		    $("#fav i").click(function () { 
+		    	var self = $(this);
+		    	var action = self.data("type");
+		    	var imagePk = self.data("pk");
+		    	var fav_value = action == "fav";
+		    	
 		        $.ajax({
 		            type: "POST",
-		            url: "{% url 'image:imageDetail' image.id %}",
+		            url: "{% url 'image:imageList' %}",
 		            data: {
-		            	"pk":{{ image.id }},
+		            	"pk": imagePk,
 		            	"fav": fav_value
 		            },
 		            success: function (data) {
-						$("#fav").data("type",(fav_value) ? "unFav" : "fav" );
-		                $("#fav").find("i").toggleClass("fa-heart", fav_value).toggleClass("fa-heart-o", !fav_value);
+		                self.data("type",(fav_value) ? "unFav" : "fav" );
+		                self.toggleClass("fa-heart", fav_value).toggleClass("fa-heart-o", !fav_value);
 		            },
 		            error: function (data) {
 		                alert("Error. " + "Status: " + data.status + " Text: " + data.statusText);

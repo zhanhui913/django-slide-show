@@ -4,7 +4,10 @@
 
 {% block header_title %} Home {% endblock %}
 
-{% block header_second %} <a class="navbar-brand" href="{% url 'image:favoriteList' %}"><i class="fa fa-heart fa-1x"> Favorites </i></a> {% endblock %}
+{% block header_second %}
+    <a class="navbar-brand" href="{% url 'image:favoriteList' %}"><i class="fa fa-heart fa-1x"> Favorites </i></a> 
+    <a class="navbar-brand" href="{% url 'image:imageList' %}"><i class="fa fa-list fa-1x"> List </i></a>
+{% endblock %}
 
 {% block page_content %}
     {% if images %}
@@ -58,7 +61,7 @@
                 width: 940,
                 height: 528,
                 naviation:true
-            });            
+            });
         });
     </script>
 {% endblock%}

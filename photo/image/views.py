@@ -13,6 +13,34 @@ class ImageListView(ListView):
 	model = Image
 	context_object_name = 'images'
 
+	def post(self, request):
+		fav_status = request.POST.get('fav', 'false')
+		image_pk = request.POST.get('pk')
+
+		if fav_status.lower() == "false":
+			# Removing this image from favorite table
+			i = Image.objects.get(pk=image_pk)
+			f = Favorite.objects.get(image=i)
+			f.delete()
+
+		else:
+			# Adding this image to favorite table
+			f = Favorite()
+			f.image = Image.objects.get(pk=image_pk)
+			
+			list_image = Favorite.objects.order_by("-order")
+
+			# If list_image exist (Ie: There is at least 1 favorited image)
+			if list_image:
+				highest_order_image = list_image[0]	
+				f.order = highest_order_image.order + 1	
+			else:
+				f.order = 1	
+
+			f.save()
+
+		return HttpResponseRedirect(reverse_lazy('image:imageList'))
+
 class ImageAddView(FormView):
 	model = Image
 	form_class = ImageForm
@@ -34,7 +62,6 @@ class ImageDetailView(DetailView):
 
 	def post(self, request, pk):
 		fav_status = request.POST.get('fav', 'false')
-		print "favoriting -> "+fav_status.lower()
 
 		if fav_status.lower() == "false":
 			# Removing this image from favorite table
@@ -49,17 +76,15 @@ class ImageDetailView(DetailView):
 			f = Favorite()
             
 			f.image = Image.objects.get(pk=pk) # Put a try catch here or do a get_object_or_404
-			
-            # This can be
-            # Favourite.objects.reverse()
+	
 			list_image = Favorite.objects.order_by("-order")
 
 			# If list_image exist (Ie: There is at least 1 favorited image)
 			if list_image:
-				highest_order_image = list_image[0]
-				f.order = highest_order_image.order + 1
+				highest_order_image = list_image[0]	
+				f.order = highest_order_image.order + 1	
 			else:
-				f.order = 1
+				f.order = 1	
 
 			f.save()
 
