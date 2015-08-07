@@ -18,7 +18,7 @@ class Image(models.Model):
 		return self.caption
 
 class Favorite(models.Model):
-	image = models.ForeignKey(Image, primary_key=True, related_name="favorites")
+	image = models.ForeignKey(Image, primary_key=True, related_name="favorites") # This can just be models.OneToOneField(...)
 	order = models.IntegerField(blank=True, null=True)
 
 	def __str__(self):

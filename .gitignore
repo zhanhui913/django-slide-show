@@ -1,5 +1,5 @@
 #Django
+venv/
 db.sqlite3
 ./photo/media/
 *.pyc
-./photo/image/migrations/

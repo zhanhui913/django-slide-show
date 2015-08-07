@@ -61,6 +61,10 @@
 				
 		    	var type = $(this).data("type");
 				var fav_value;
+                
+                // This entire if else canse just be
+                // fav_value = type == "fav";
+                // It will encode the true|false as JSON and Django will see it as the Python True|False
 		    	if(type == "fav"){
 		    		fav_value = "True";
 		    	}else{
@@ -76,7 +80,12 @@
 		            },
 		            success: function (data) {
 		                if(fav_value == "True"){
-		                	$("#fav").data("type","unFav");	
+		                	$("#fav").data("type","unFav");
+                            
+                            // This can be:
+                            // $("#fav").find("i")
+                            //  .toggleClass("fa-heart", fav_value)
+                            //  .toggleClass("fa-heart-o", !fav_value);
 		                	$("#fav").find("i").addClass("fa-heart").removeClass("fa-heart-o");
 		                }else{
 		                	$("#fav").data("type","fav");
