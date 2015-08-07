@@ -11,19 +11,20 @@
 
 {% block page_content %}
     {% if images %}
-        <div class="slideContainer">
-            <div id = "slides">
+        <div id="owl-demo" class="owl-carousel">
                 {% for image in images %}
+                <div>
                     <a href="{{ image.get_absolute_url }}">
                         <img src="{{ image.path.url }}"/>
                     </a>
+                </div>
                 {% endfor %}
-                <a href="#" class="slidesjs-previous slidesjs-navigation"><i class="icon-chevron-left icon-large"></i></a>
-                <a href="#" class="slidesjs-next slidesjs-navigation"><i class="icon-chevron-right icon-large"></i></a>
-            </div>
         </div>
+        <br>
     {% else %}
-        <p>No images.</p>
+        <div class="alert alert-warning col-lg-10 col-lg-offset-1" role="alert">
+            <strong>Info!</strong> There are no images uploaded.
+        </div>
     {% endif %}
 
     <!-- Upload form. Note enctype attribute! -->
@@ -57,11 +58,25 @@
 
     <script>
         $(function(){
-            $("#slides").slidesjs({
+            /*$("#slides").slidesjs({
                 width: 940,
                 height: 528,
                 naviation:true
+            });*/
+
+            $("#owl-demo").owlCarousel({
+                autoPlay : 3000,
+                stopOnHover : true,
+                navigation:true,
+                paginationSpeed : 1000,
+                goToFirstSpeed : 2000,
+                singleItem : true,
+                autoHeight : true,
+                transitionStyle:"fade"
             });
+
+
+
         });
     </script>
 {% endblock%}
