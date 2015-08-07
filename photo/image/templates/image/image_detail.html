@@ -6,7 +6,10 @@
 
 {% block header_title %} Home {% endblock %}
 
-{% block header_second %} <a class="navbar-brand" href="{% url 'image:favoriteList' %}"><i class="fa fa-heart fa-1x"> Favorites </i></a> {% endblock %}
+{% block header_second %}
+    <a class="navbar-brand" href="{% url 'image:favoriteList' %}"><i class="fa fa-heart fa-1x"> Favorites </i></a> 
+    <a class="navbar-brand" href="{% url 'image:imageList' %}"><i class="fa fa-list fa-1x"> List </i></a>
+{% endblock %}
 
 {% block page_content %}
 
@@ -58,14 +61,8 @@
 
 		$(function () {
 		    $("#fav").click(function () {
-				
 		    	var type = $(this).data("type");
-				var fav_value;
-		    	if(type == "fav"){
-		    		fav_value = "True";
-		    	}else{
-		    		fav_value = "False";
-		    	}
+		    	var fav_value = type == "fav";
 
 		        $.ajax({
 		            type: "POST",
@@ -75,13 +72,8 @@
 		            	"fav": fav_value
 		            },
 		            success: function (data) {
-		                if(fav_value == "True"){
-		                	$("#fav").data("type","unFav");	
-		                	$("#fav").find("i").addClass("fa-heart").removeClass("fa-heart-o");
-		                }else{
-		                	$("#fav").data("type","fav");
-		                	$("#fav").find("i").addClass("fa-heart-o").removeClass("fa-heart");
-		                }
+						$("#fav").data("type",(fav_value) ? "unFav" : "fav" );
+		                $("#fav").find("i").toggleClass("fa-heart", fav_value).toggleClass("fa-heart-o", !fav_value);
 		            },
 		            error: function (data) {
 		                alert("Error. " + "Status: " + data.status + " Text: " + data.statusText);
