@@ -2,14 +2,7 @@ from django.contrib import admin
 
 from .models import Image, Favorite
 
-# Register your models here.
-
-# You can do this:
-# @admin.register(Image)
-#
-# instead of admin.site.register(Image, ImageAdmin)
-#
-# Same for below (FavAdmin_
+@admin.register(Image)
 class ImageAdmin(admin.ModelAdmin):
 	fieldsets = [
 		(None,               {'fields':['caption']}),
@@ -21,10 +14,6 @@ class ImageAdmin(admin.ModelAdmin):
 	list_filter = ['is_fav']
 	search_fields = ('caption','description')
 
-admin.site.register(Image, ImageAdmin)
-
-
+@admin.register(Favorite)
 class FavAdmin(admin.ModelAdmin):
 	list_display = ('image','order')
-
-admin.site.register(Favorite, FavAdmin)
